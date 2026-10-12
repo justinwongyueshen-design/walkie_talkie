@@ -1,0 +1,39 @@
+# Walkie Talkie - project root used as web root (XAMPP: http://localhost/walkie-talkie/)
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Never serve private folders or hidden files over HTTP
+    RewriteRule ^(app|config|views|storage|tests)(/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
+
+    # Static files live in /public
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+    RewriteRule ^(sw\.js|manifest\.webmanifest|offline\.html)$ public/$1 [L]
+
+    # Everything else goes to the front controller
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+AddType application/manifest+json .webmanifest
+AddType text/javascript .js
+
+<IfModule mod_headers.c>
+    <FilesMatch "^sw\.js$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>
+
+<FilesMatch "^\.(env|secret|gitignore)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

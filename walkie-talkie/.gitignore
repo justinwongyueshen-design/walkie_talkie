@@ -1,0 +1,7 @@
+.env
+storage/rooms/*
+storage/logs/*
+storage/sessions/*
+storage/ratelimit/*
+storage/.secret
+!storage/*/.gitkeep
